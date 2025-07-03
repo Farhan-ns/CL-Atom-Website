@@ -25,4 +25,9 @@ class Brand extends Model
         $sluggedName = str($this->name)->slug();
         return "https://ui-avatars.com/api/?name=$sluggedName)";
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
