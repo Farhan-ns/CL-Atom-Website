@@ -10,8 +10,10 @@ use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,7 +38,7 @@ class UserResource extends Resource
                     ->maxLength(255)
                     ->required(),
                 TextInput::make('email')
-                    ->label('Nama')
+                    ->label('Email')
                     ->maxLength(255)
                     ->email()
                     ->required(),
@@ -53,6 +55,20 @@ class UserResource extends Resource
                     ->dehydrated(fn(?string $state): bool => filled($state))
                     ->required(fn(string $operation): bool => $operation === 'create')
                     ->default(''),
+                Select::make('brand_id')
+                    ->relationship(name: 'brand', titleAttribute: 'name')
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->label('Nama Brand')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', str($state)->slug)),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->required()
+                            ->maxLength(50),
+                    ]),
             ]);
     }
 
@@ -68,6 +84,9 @@ class UserResource extends Resource
                     ->label('Roles')
                     ->formatStateUsing(fn(User $record) => $record->getRoleNames()->join(','))
                     ->sortable(),
+                TextColumn::make('brand.name')
+                    ->label('Brand')
+                    ->searchable(),
                 TextColumn::make('updated_at')
                     ->label('Terakhir diperbaharui')
                     ->formatStateUsing(fn($state) => Carbon::parse($state)
