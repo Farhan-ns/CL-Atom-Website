@@ -13,5 +13,6 @@ class Respondent extends Model
         'religion',
         'age',
         'coming_from',
+        'birthdate'
     ];
 }
