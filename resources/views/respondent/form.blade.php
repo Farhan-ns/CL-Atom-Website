@@ -30,7 +30,7 @@
             </h1>
 
             <div x-data="darkModeSwitch()" class="flex flex-row text-black dark:text-white">
-              
+
               <button @click="toggleDarkMode()"
                 class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                 :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
@@ -83,6 +83,14 @@
                 <label for="phone" class="block text-gray-700 dark:text-white mb-1">Nomor Whatsapp</label>
                 <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxx"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 mt-4">
+              <div>
+                <label for="phone" class="block text-gray-700 dark:text-white mb-1">Tanggal Lahir</label>
+                <input type="date" name="birthdate" id="birthdate"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" />
               </div>
             </div>
 
@@ -260,55 +268,64 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
   <script>
-    const validator = new window.JustValidate('#respondent-form', undefined, [{
-        key: 'Name is required',
-        dict: {
-          Indonesian: 'Nama wajib diisi',
-        },
+    const validator = new window.JustValidate('#respondent-form', {
+        submitFormAutomatically: true,
       },
-      {
-        key: 'Name is too short',
-        dict: {
-          Indonesian: 'Nama terlalu pendek',
+      [{
+          key: 'Name is required',
+          dict: {
+            Indonesian: 'Nama wajib diisi',
+          },
         },
-      },
-      {
-        key: 'Email is required',
-        dict: {
-          Indonesian: 'Email wajib diisi',
+        {
+          key: 'Name is too short',
+          dict: {
+            Indonesian: 'Nama terlalu pendek',
+          },
         },
-      },
-      {
-        key: 'Email is invalid',
-        dict: {
-          Indonesian: 'Format email tidak valid',
+        {
+          key: 'Email is required',
+          dict: {
+            Indonesian: 'Email wajib diisi',
+          },
         },
-      },
-      {
-        key: 'Phone is required',
-        dict: {
-          Indonesian: 'Nomor WhatsApp wajib diisi',
+        {
+          key: 'Email is invalid',
+          dict: {
+            Indonesian: 'Format email tidak valid',
+          },
         },
-      },
-      {
-        key: 'Phone is invalid',
-        dict: {
-          Indonesian: 'Nomor WhatsApp harus berupa angka',
+        {
+          key: 'Phone is required',
+          dict: {
+            Indonesian: 'Nomor WhatsApp wajib diisi',
+          },
         },
-      },
-      {
-        key: 'Religion is required',
-        dict: {
-          Indonesian: 'Agama wajib dipilih',
+        {
+          key: 'Phone is invalid',
+          dict: {
+            Indonesian: 'Nomor WhatsApp harus berupa angka',
+          },
         },
-      },
-      {
-        key: 'Source is required',
-        dict: {
-          Indonesian: 'Sumber informasi wajib dipilih',
+        {
+          key: 'Birthdate is required',
+          dict: {
+            Indonesian: 'Tanggal lahir wajib diisi',
+          },
         },
-      },
-    ]);
+        {
+          key: 'Religion is required',
+          dict: {
+            Indonesian: 'Agama wajib dipilih',
+          },
+        },
+        {
+          key: 'Source is required',
+          dict: {
+            Indonesian: 'Sumber informasi wajib dipilih',
+          },
+        },
+      ]);
 
     validator
       .addField('#name', [{
@@ -339,6 +356,10 @@
           errorMessage: 'Phone is invalid',
         },
       ])
+      .addField('#birthdate', [{
+        rule: 'required',
+        errorMessage: 'Birthdate is required',
+      }])
       .addRequiredGroup('#religion-radio-group', 'Religion is required')
       .addRequiredGroup('#source-radio-group', 'Source is required');
 

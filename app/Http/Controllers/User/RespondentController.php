@@ -24,6 +24,7 @@ class RespondentController extends Controller
             'phone' => ['required'],
             'religion' => ['required'],
             'coming_from' => ['required'],
+            'birthdate' => ['required'],
         ]);
 
         $validated['religion'] = str($validated['religion'])->title();
