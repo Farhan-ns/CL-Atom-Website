@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\WhatsAppServiceInterface;
+use App\DTO\ContentTemplate;
 use Exception;
 use Twilio\Rest\Client;
 
@@ -11,7 +12,7 @@ class TwilioService implements WhatsAppServiceInterface
     private $twilio_sid;
     private $twilio_token;
     private $twilio_from;
-    private $twilio_client;
+    private Client $twilio_client;
 
     public function __construct()
     {
@@ -24,11 +25,34 @@ class TwilioService implements WhatsAppServiceInterface
         }
 
         $this->twilio_client = new Client($this->twilio_sid, $this->twilio_token);
+        $this->twilio_client->content->v1->contents();
     }
 
     public function sendMessage(string $to, string $message): void
     {
         // TODO implement Twilio Api Call
         throw Exception('Unimplemented');
+    }
+
+    /**
+     * Fetch a Twilio content template by SID.
+     *
+     * @param string $templateSid
+     * @return ContentTemplate
+     * @throws Exception
+     */
+    public function fetchTemplate(string $templateSid): ContentTemplate
+    {
+        try {
+            $template = $this->twilio_client
+                ->content
+                ->v1
+                ->contentSid($templateSid)
+                ->fetch();
+
+            return ContentTemplate::fromTwilio($template);
+        } catch (Exception $e) {
+            throw new Exception("Failed to fetch template: " . $e->getMessage(), 500);
+        }
     }
 }
