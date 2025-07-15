@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BrandResource extends Resource
 {
+    // TODO only show assigned user brand
     protected static ?string $model = Brand::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
