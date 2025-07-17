@@ -9,6 +9,8 @@ class ContentTemplate
     public array $types;
     public array $languages;
     public string $dateCreated;
+    public ?string $body; 
+    public ?array $variables; 
 
     public function __construct(array $attributes)
     {
@@ -17,6 +19,8 @@ class ContentTemplate
         $this->types = $attributes['types'];
         $this->languages = $attributes['languages'];
         $this->dateCreated = $attributes['dateCreated'];
+        $this->body = $attributes['body'] ?? null;
+        $this->variables = $attributes['variables'] ?? null;
     }
 
     public static function fromTwilio($twilioObject): self
@@ -27,6 +31,8 @@ class ContentTemplate
             'types' => $twilioObject->types,
             'languages' => $twilioObject->languages,
             'dateCreated' => $twilioObject->dateCreated->format('Y-m-d H:i:s'),
+            'body' => $twilioObject->body ?? null, 
+            'variables' => $twilioObject->variables ?? null,
         ]);
     }
 

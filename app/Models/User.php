@@ -23,8 +23,10 @@ class User extends Authenticatable implements FilamentUser
      */
     protected $fillable = [
         'name',
+        'last_name',
         'email',
         'password',
+        'profile_picture',
     ];
 
     /**
@@ -53,6 +55,25 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function getFullnameAttribute(): string
+    {
+        return $this->name . ' ' . $this->last_name ?? '';
+    }
+
+    public function getProfilePicturePathAttribute()
+    {
+        if ($this->profile_picture) {
+            return asset('storage/' . $this->profile_picture);
+        }
+
+        $name = urlencode($this->fullname ?? 'User');
+        $backgroundColor = 'F04D41'; // Atom color 
+        $textColor = 'FFFFFF'; // White text
+        $size = 200;
+
+        return "https://ui-avatars.com/api/?name={$name}&background={$backgroundColor}&color={$textColor}&size={$size}";
     }
 
     public function brand()

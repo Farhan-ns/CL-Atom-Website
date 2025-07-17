@@ -25,7 +25,7 @@ class TwilioService implements WhatsAppServiceInterface
         }
 
         $this->twilio_client = new Client($this->twilio_sid, $this->twilio_token);
-        $this->twilio_client->content->v1->contents();
+        // $this->twilio_client->content->v1->contents();
     }
 
     public function sendMessage(string $to, string $message): void
@@ -44,10 +44,11 @@ class TwilioService implements WhatsAppServiceInterface
     public function fetchTemplate(string $templateSid): ContentTemplate
     {
         try {
+            // Try the correct Twilio Content API endpoint
             $template = $this->twilio_client
                 ->content
                 ->v1
-                ->contentSid($templateSid)
+                ->contents($templateSid) // Use 'contents' instead of 'contentSid'
                 ->fetch();
 
             return ContentTemplate::fromTwilio($template);
